@@ -1,35 +1,39 @@
 # Agentic Next.js Starter Roadmap
 
-## 1. Next.js Skills (via MCP)
+## 1. Browser Feedback Loop ✓
 
-- Integrate [`next-devtools-mcp`](https://github.com/vercel/next-devtools-mcp) for route/component introspection
-- Create skills for common operations: create page, create API route, add middleware
-- Add skills for Next.js-specific patterns (server actions, parallel routes, etc.)
+- `bun run d3k` replaces `bun run dev` - starts Next.js with browser monitoring, no MCP context overhead
+- `/debug` skill reads `~/.d3k/logs/` and analyzes errors by priority
+- Screenshots captured on errors via dev3000's CDP monitoring
+- Browser actions available via dev3000 API (localhost:3684) when needed
 
-## 2. Browser Feedback Loop
-
-- Integrate dev3000 or similar browser automation MCP
-- Enable screenshot capture of running app for visual feedback
-- Add console/network error capture for debugging context
-- Consider Playwright MCP for e2e test generation
-
-## 3. Local Next.js Documentation
+## 2. Local Next.js Documentation ✓
 
 - **Download script** (`bun run docs:update`) fetches docs from `vercel/next.js/docs`
 - Store in `.claude/docs/nextjs/` for direct Grep/Read access
 - **Hook** checks docs age on session start, prompts update if stale (>7 days)
 - Reference path in `CLAUDE.md` - no skill needed, native file access is faster
-- Include App Router docs primarily, Pages Router as secondary
-- Version-lock docs to match project's Next.js version in `package.json`
 
-## 4. Evaluation
+## 3. Remaining Items
 
+### Version-lock docs
+- Match docs to project's Next.js version in `package.json`
+- Currently fetches canary branch
+
+### Evaluation
 - Use [`next-evals-oss`](https://github.com/vercel/next-evals-oss) to benchmark agentic setup
 - Track improvements across iterations
-- Compare performance with different MCP/skill configurations
+- Compare before/after with docs + debug skill
 
-## 5. Configuration
+### Next.js Skills (optional)
+- Skipping basic scaffolding skills (create page, API route) - too simple
+- Consider skills for complex patterns only (parallel routes, intercepting routes)
+- May not be needed if docs access is sufficient
 
-- Add `.claude/settings.json` with MCP server configs
-- Create setup script (`bun run setup:claude`) for first-time config
-- Document required API keys/permissions
+## Design Considerations
+
+- Fewer tool calls to resolve files
+- Docs on disk, not web
+- Skills for multi-step workflows only
+- Pull context on demand, don't preload
+- One path = one file

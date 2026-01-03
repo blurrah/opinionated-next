@@ -168,6 +168,12 @@ Do not run any package manager or build commands.`;
     result.lint = lintResult.exitCode === 0;
     console.log(result.lint ? "  ✅ Lint passed" : "  ❌ Lint failed");
 
+    if (!result.lint && debug) {
+      console.log("\n📋 Lint output:");
+      console.log(lintResult.stdout.toString());
+      console.log(lintResult.stderr.toString());
+    }
+
     // Run tests
     if (testFiles.length > 0) {
       console.log("🧪 Running tests...");

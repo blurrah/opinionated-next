@@ -64,7 +64,13 @@ Read the last 200 lines of the log file and categorize:
 
 ### 3. Check screenshots
 
-If `screenshotDir` is available, list recent screenshots. Files ending in `-error.png` show app state when errors occurred.
+Screenshot URLs appear in the logs as `[SCREENSHOT]` entries. Download and read them:
+
+```bash
+curl -s -o /tmp/screenshot.png "http://localhost:3684/api/screenshots/{filename}"
+```
+
+Then use the Read tool on `/tmp/screenshot.png` to view the error overlay.
 
 ### 4. Report findings
 

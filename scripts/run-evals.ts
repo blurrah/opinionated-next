@@ -154,6 +154,12 @@ Do not run any package manager or build commands.`;
     result.build = buildResult.exitCode === 0;
     console.log(result.build ? "  ✅ Build passed" : "  ❌ Build failed");
 
+    if (!result.build && debug) {
+      console.log("\n📋 Build output:");
+      console.log(buildResult.stdout.toString());
+      console.log(buildResult.stderr.toString());
+    }
+
     // Run lint
     console.log("🔍 Running lint...");
     const lintResult = await $`cd ${PROJECT_ROOT} && bun x ultracite check`

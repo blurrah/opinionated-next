@@ -46,3 +46,6 @@ tmp/
 
 # debug output (from CDP runner)
 .debug/
+
+# evals cache (cloned from next-evals-oss)
+.evals-cache/

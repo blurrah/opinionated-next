@@ -15,11 +15,12 @@
 
 ## 3. Local Next.js Documentation
 
-- Script to fetch/update Next.js docs from GitHub (`vercel/next.js/docs`)
-- Store in `.claude/docs/nextjs/` for local context
-- Add to `.claude/CLAUDE.md` as reference path
-- Include App Router and Pages Router sections
-- Consider versioning to match project's Next.js version
+- **Download script** (`bun run docs:update`) fetches docs from `vercel/next.js/docs`
+- Store in `.claude/docs/nextjs/` for direct Grep/Read access
+- **Hook** checks docs age on session start, prompts update if stale (>7 days)
+- Reference path in `CLAUDE.md` - no skill needed, native file access is faster
+- Include App Router docs primarily, Pages Router as secondary
+- Version-lock docs to match project's Next.js version in `package.json`
 
 ## 4. Evaluation
 

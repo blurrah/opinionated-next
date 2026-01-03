@@ -9,7 +9,9 @@
     "lint": "biome check",
     "format": "biome format --write",
     "docs:update": "bun run scripts/update-docs.ts",
-    "d3k": "bun x dev3000@0.0.128 --disable-mcp-configs all"
+    "d3k": "bun x dev3000@0.0.128 --disable-mcp-configs all",
+    "evals": "bun run scripts/run-evals.ts",
+    "evals:all": "bun run scripts/run-evals.ts --all"
   },
   "imports": {
     "#/*": "./src/*"

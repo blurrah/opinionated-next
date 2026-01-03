@@ -1,4 +1,8 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+A Claude Code optimized Next.js starter.
+
+- **Local docs** — Next.js documentation in `.claude/docs/` for direct filesystem access
+- **Explicit extensions** — `.ts` extensions in imports so Claude resolves files in one read
+- **Subpath imports** — `#components/Button` instead of relative paths or `@/` aliases for predictable resolution
 
 ## Getting Started
 

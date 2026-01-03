@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# claude docs (downloaded via bun run docs:update)
+.claude/docs/

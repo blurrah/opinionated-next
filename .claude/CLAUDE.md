@@ -121,3 +121,13 @@ Biome's linter will catch most issues automatically. Focus your attention on:
 ---
 
 Most formatting and common issues are automatically fixed by Biome. Run `bun x ultracite fix` before committing to ensure compliance.
+
+---
+
+## Next.js Documentation
+
+Local Next.js documentation is available at `.claude/docs/nextjs/` for direct reference. Use Grep/Read to search these docs when working on Next.js features.
+
+- **Update docs**: `bun run docs:update`
+- **Location**: `.claude/docs/nextjs/`
+- **Source**: `vercel/next.js` canary branch

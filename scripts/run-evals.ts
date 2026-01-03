@@ -175,17 +175,25 @@ Do not run any package manager or build commands.`;
       const testPaths = testFiles.map((f) => f.replace(inputDir + "/", ""));
       console.log(`  Running: ${testPaths.join(", ")}`);
 
-      const testResult =
-        await $`cd ${PROJECT_ROOT} && bun vitest run ${testPaths} --reporter=verbose`
-          .quiet()
-          .nothrow();
-      result.tests = testResult.exitCode === 0;
+      // Use Bun.spawn to properly pass test paths as arguments
+      const testProc = Bun.spawn(
+        ["bun", "vitest", "run", ...testPaths, "--reporter=verbose"],
+        {
+          cwd: PROJECT_ROOT,
+          stdout: "pipe",
+          stderr: "pipe",
+        }
+      );
+      await testProc.exited;
+      const testStdout = await new Response(testProc.stdout).text();
+      const testStderr = await new Response(testProc.stderr).text();
+      result.tests = testProc.exitCode === 0;
       console.log(result.tests ? "  ✅ Tests passed" : "  ❌ Tests failed");
 
       if (!result.tests && debug) {
         console.log("\n📋 Test output:");
-        console.log(testResult.stdout.toString());
-        console.log(testResult.stderr.toString());
+        console.log(testStdout);
+        console.log(testStderr);
       }
     } else {
       result.tests = true; // No tests to run

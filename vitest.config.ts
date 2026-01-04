@@ -10,5 +10,6 @@ export default defineConfig({
       "**/.next/**",
     ],
     root: ".",
+    environment: "jsdom",
   },
 });

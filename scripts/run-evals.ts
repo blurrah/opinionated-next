@@ -254,8 +254,8 @@ IMPORTANT: Do not run npm, pnpm, yarn, bun, or any package manager commands. Dep
 
 This is the opinionated-next project. Use the existing project structure:
 - Use Biome for linting (not ESLint)
-- Use explicit .ts extensions in imports
-- Use subpath imports (#/) when importing from src/`;
+- Use explicit file extensions in imports (.ts for TypeScript, .tsx for TSX/JSX files)
+- Use subpath imports (#/) only when importing from src/ directory`;
 
     const claudeResult =
       await $`cd ${PROJECT_ROOT} && claude --print --dangerously-skip-permissions ${claudePrompt}`
@@ -438,8 +438,8 @@ IMPORTANT: Do not run npm, pnpm, yarn, bun, or any package manager commands. Dep
 
 This is the opinionated-next project. Use the existing project structure:
 - Use Biome for linting (not ESLint)
-- Use explicit .ts extensions in imports
-- Use subpath imports (#/) when importing from src/`;
+- Use explicit file extensions in imports (.ts for TypeScript, .tsx for TSX/JSX files)
+- Use subpath imports (#/) only when importing from src/ directory`;
 
       if (feedbackContext) {
         claudePrompt += `

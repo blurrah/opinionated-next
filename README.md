@@ -1,8 +1,8 @@
 A Claude Code optimized Next.js starter.
 
 - **Local docs** — Next.js documentation in `.claude/docs/` for direct filesystem access
-- **Explicit extensions** — `.ts` extensions in imports so Claude resolves files in one read
-- **Subpath imports** — `#components/Button` instead of relative paths or `@/` aliases for predictable resolution
+- **Explicit extensions** — `.ts`/`.tsx` extensions in imports so Claude resolves files in one read
+- **Subpath imports** — `#/components/Button.tsx` (from `src/`) instead of relative paths for predictable resolution
 
 Non-AI notes: Focusing on evalmaxxing here and trying to use as little MCP as possible to keep context usage low.
 I want an optimized feedback loop for both server and browser logs, maybe through subagents, dunno yet.

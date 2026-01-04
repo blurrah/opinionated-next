@@ -235,15 +235,12 @@ async function runEval(evalName: string, debug: boolean): Promise<EvalResult> {
       if (stubFile.includes(".test.")) continue; // Skip test files
       const relativePath = stubFile.replace(inputDir + "/", "");
       const destPath = join(PROJECT_ROOT, relativePath);
-      // Only copy if it doesn't exist (don't overwrite our files)
-      if (!existsSync(destPath)) {
-        const destDir = join(destPath, "..");
-        if (!existsSync(destDir)) {
-          mkdirSync(destDir, { recursive: true });
-        }
-        cpSync(stubFile, destPath);
-        console.log(`  Copied stub: ${relativePath}`);
+      const destDir = join(destPath, "..");
+      if (!existsSync(destDir)) {
+        mkdirSync(destDir, { recursive: true });
       }
+      cpSync(stubFile, destPath);
+      console.log(`  Copied stub: ${relativePath}`);
     }
 
     // Run Claude Code with the prompt
@@ -409,14 +406,12 @@ async function runEvalFull(
       if (stubFile.includes(".test.")) continue;
       const relativePath = stubFile.replace(inputDir + "/", "");
       const destPath = join(PROJECT_ROOT, relativePath);
-      if (!existsSync(destPath)) {
-        const destDir = join(destPath, "..");
-        if (!existsSync(destDir)) {
-          mkdirSync(destDir, { recursive: true });
-        }
-        cpSync(stubFile, destPath);
-        console.log(`  Copied stub: ${relativePath}`);
+      const destDir = join(destPath, "..");
+      if (!existsSync(destDir)) {
+        mkdirSync(destDir, { recursive: true });
       }
+      cpSync(stubFile, destPath);
+      console.log(`  Copied stub: ${relativePath}`);
     }
 
     // Start d3k for feedback loop

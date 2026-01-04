@@ -130,11 +130,12 @@ async function runEval(evalName: string, debug: boolean): Promise<EvalResult> {
     console.log("\n🤖 Running Claude Code...");
     const claudePrompt = `${prompt}
 
-IMPORTANT: This is the opinionated-next project. Use the existing project structure.
+IMPORTANT: Do not run npm, pnpm, yarn, bun, or any package manager commands. Dependencies have already been installed. Do not run build, test, or dev server commands. Just write the code files. DO NOT ask any followup questions either.
+
+This is the opinionated-next project. Use the existing project structure:
 - Use Biome for linting (not ESLint)
 - Use explicit .ts extensions in imports
-- Use subpath imports (#/) when importing from src/
-Do not run any package manager or build commands.`;
+- Use subpath imports (#/) when importing from src/`;
 
     const claudeResult =
       await $`cd ${PROJECT_ROOT} && claude --print --dangerously-skip-permissions ${claudePrompt}`
@@ -178,7 +179,7 @@ Do not run any package manager or build commands.`;
     if (testFiles.length > 0) {
       console.log("🧪 Running tests...");
       // Install vitest if needed
-      await $`cd ${PROJECT_ROOT} && bun add -d vitest @testing-library/react`
+      await $`cd ${PROJECT_ROOT} && bun add -d vitest @testing-library/react jsdom`
         .quiet()
         .nothrow();
 
@@ -250,15 +251,57 @@ function printResults(results: EvalResult[]): void {
   }
   console.log("═".repeat(80));
 
+  // Summary statistics
+  const buildPass = results.filter((r) => r.build).length;
+  const lintPass = results.filter((r) => r.lint).length;
+  const testPass = results.filter((r) => r.tests).length;
+  const total = results.length;
+
+  const pct = (n: number) => ((n / total) * 100).toFixed(0);
+  console.log(
+    `\n📈 Summary (B/L/T): ${buildPass}/${lintPass}/${testPass} of ${total} (${pct(buildPass)}%/${pct(lintPass)}%/${pct(testPass)}%)`
+  );
+
   const passed = results.filter((r) => r.build && r.lint && r.tests).length;
-  console.log(`\n✨ ${passed}/${results.length} evals passed`);
+  console.log(`✨ ${passed}/${total} evals passed (${pct(passed)}%)`);
+}
+
+function writeJsonResults(results: EvalResult[], outputPath: string): void {
+  const jsonResults = results.map((r) => ({
+    evalPath: r.name,
+    result: {
+      success: r.build && r.lint && r.tests,
+      buildSuccess: r.build,
+      lintSuccess: r.lint,
+      testSuccess: r.tests,
+      duration: Math.round(r.duration * 1000),
+      error: r.error,
+    },
+  }));
+
+  Bun.write(outputPath, JSON.stringify(jsonResults, null, 2));
+  console.log(`\n📄 Results written to ${outputPath}`);
 }
 
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
   const runAll = args.includes("--all");
   const debug = args.includes("--debug");
-  const evalName = args.find((a) => !a.startsWith("--"));
+  const outputIdx = args.indexOf("--output");
+  const outputFile = outputIdx !== -1 ? args[outputIdx + 1] : null;
+
+  // Find eval name (positional arg that's not a flag or flag value)
+  let evalName: string | undefined;
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i];
+    if (arg.startsWith("--")) {
+      // Skip flag values
+      if (arg === "--output") i++;
+      continue;
+    }
+    evalName = arg;
+    break;
+  }
 
   await fetchEvals();
 
@@ -270,6 +313,7 @@ async function main(): Promise<void> {
     console.log("  bun run evals <eval-name>    Run specific eval");
     console.log("  bun run evals --all          Run all evals");
     console.log("  bun run evals --debug        Show verbose output");
+    console.log("  bun run evals --output FILE  Write JSON results to file");
     console.log("\nAvailable evals:");
     for (const e of evals.slice(0, 10)) {
       console.log(`  ${e}`);
@@ -291,6 +335,10 @@ async function main(): Promise<void> {
   }
 
   printResults(results);
+
+  if (outputFile) {
+    writeJsonResults(results, outputFile);
+  }
 }
 
 main().catch(console.error);
